@@ -12,6 +12,16 @@ services:
       - 3000:3000
     restart: always 
   
+  node_red:
+    image: nodered/node-red:3.1-debian
+    volumes:
+      - ${PWD}/node-red:/node-red    
+    networks: 
+      - docker-compose-network     
+    ports:
+      - 1880:1880
+    restart: always
+
   data:
     image: mongo:latest
     environment:
