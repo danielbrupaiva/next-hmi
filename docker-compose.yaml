@@ -1,0 +1,45 @@
+services:
+  app:
+    build:
+      context: ./nextjs
+    environment:
+      NODE_ENV: production
+    volumes:
+      - app_data:/nextjs
+    networks: 
+      - docker-compose-network     
+    ports:
+      - 3000:3000
+    restart: always 
+  
+  data:
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: 1234
+    volumes:
+      - mongo_data:/data/db
+    networks: 
+      - docker-compose-network
+    ports:
+      - 27017:27017
+    restart: always    
+
+volumes:
+  app_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${PWD}/nextjs
+  
+  mongo_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ${PWD}/mongodb
+
+networks: 
+    docker-compose-network:
+      driver: bridge
